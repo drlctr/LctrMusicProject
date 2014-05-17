@@ -1,0 +1,19 @@
+<html>
+<body>
+<center><h1>Welcome to the LctrMusic DB Site</h1>
+
+<%= image_tag(pick_guitar(@color_white)) %>
+<br>
+<%= link_to 'I want a white guitar!', hello_path(color_white: true) %>
+&nbsp;
+<%= link_to 'I want a natural guitar!', hello_path(color_white: false) %>
+<h3> <%= "Currently tracking #{Song.all.count} songs!" %>
+</center>
+<br>
+<br>
+<h2><%= link_to('Take me to the database', songs_path) %></h2>
+
+<h2>
+<%= link_to('Buy more music!', '/purchase') %></h2>
+</body>
+</html>

@@ -10,6 +10,8 @@ group :test, :development do
 	gem 'rspec-rails'
 end
 
+gem 'validates_timeliness', '~> 3.0'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
 

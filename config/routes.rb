@@ -4,6 +4,8 @@ MusicProject::Application.routes.draw do
   get '/hello', to:  'home#hello'
   root to:  'home#hello'
 
+  get '/purchase', to:  'home#amazon'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
