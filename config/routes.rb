@@ -1,4 +1,9 @@
 MusicProject::Application.routes.draw do
+  resources :songs
+
+  get '/hello', to:  'home#hello'
+  root to:  'home#hello'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
