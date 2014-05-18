@@ -1,14 +1,19 @@
-<h1>Listing songs</h1>
+<h1>Song Library</h1>
 
 <table>
   <thead>
+  <table border="1">
     <tr>
-      <th>Song title</th>
+      <th>Song Title</th>
+      <th>Artist</th>
+      <th>Album Title</th>
       <th>Track</th>
       <th>Duration</th>
+      <th>Genre</th>
       <th>Path</th>
       <th>Filename</th>
       <th>Composer</th>
+      <th>Musicians</th>
       <th></th>
       <th></th>
       <th></th>
@@ -19,11 +24,15 @@
     <% @songs.each do |song| %>
       <tr>
         <td><%= song.song_title %></td>
+        <td><i>Artist</i></td>
+        <td><i>Album</i></td>
         <td><%= song.track %></td>
-        <td><%= song.duration %></td>
+        <td><%= song.durationmin %></td>
+        <td><i>Genre</i></td>
         <td><%= song.path %></td>
         <td><%= song.filename %></td>
         <td><%= song.composer %></td>
+        <td><i>Musicians</i></td>
         <td><%= link_to 'Show', song %></td>
         <td><%= link_to 'Edit', edit_song_path(song) %></td>
         <td><%= link_to 'Destroy', song, method: :delete, data: { confirm: 'Are you sure?' } %></td>

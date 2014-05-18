@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Song do
 
-  let(:test_good){Song.new(song_title: "Title", track: 1, duration: 1, path: "path", filename: "filename")}
+  let(:test_good){Song.new(song_title: "Title", track: 1, duration: 7322, path: "path", filename: "filename")}
   let(:test_no_title){Song.new(track: 1, duration: 1, path: "path", filename: "filename")}
   let(:test_neg_track){Song.new(song_title: "Title", track: -1, duration: 1, path: "path", filename: "filename")}
   let(:test_neg_dur){Song.new(song_title: "Title", track: 1, duration: 0, path: "path", filename: "filename")}
@@ -11,7 +11,14 @@ describe Song do
   let(:test_float_track){Song.new(song_title: "Title", track: 1.5, duration: 1, path: "path", filename: "filename")}
   let(:test_float_dur){Song.new(song_title: "Title", track: 1, duration: 1.5, path: "path", filename: "filename")}
 
-  context "Testing correct validation" do
+  context "When testing the duration conversion, it" do
+
+    it "must correctly convert sec to hr:min:sec" do
+      expect(test_good.durationmin).to eq("02:02:02")
+    end
+  end
+  
+  context "When testing correct song validation, it" do
 
   	it "must correctly validate a good record" do
   	expect(test_good.valid?).to be_true

@@ -1,6 +1,10 @@
 class SongsController < ApplicationController
   before_action :set_song, only: [:show, :edit, :update, :destroy]
 
+  #before_action :edit_warning, only: :edit
+
+  layout 'augmented'
+
   # GET /songs
   # GET /songs.json
   def index

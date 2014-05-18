@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140517230202) do
+ActiveRecord::Schema.define(version: 20140517234339) do
 
   create_table "albums", force: true do |t|
     t.string   "album_title"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140517230202) do
     t.string   "genre"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "protected"
   end
 
   create_table "artists", force: true do |t|
