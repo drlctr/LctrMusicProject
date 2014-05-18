@@ -1,4 +1,6 @@
 MusicProject::Application.routes.draw do
+  resources :albums
+
   resources :songs
 
   get '/hello', to:  'home#hello'
