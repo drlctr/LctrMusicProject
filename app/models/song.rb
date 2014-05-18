@@ -13,10 +13,9 @@ class Song < ActiveRecord::Base
   validates :filename, presence: true
 
   def durationmin 
-	  hr = (self.duration.to_f/3600).truncate
-	  min = (self.duration.modulo(3600)/60).truncate
+	  min = (self.duration/60).truncate
 	  sec = self.duration.modulo(60)
-	  rtn = "#{format('%02d',hr)}:#{format('%02d',min)}:#{format('%02d',sec)}"
+	  rtn = "#{format('%02d',min)}:#{format('%02d',sec)}"
   end
 
 end

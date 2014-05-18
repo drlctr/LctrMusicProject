@@ -35,6 +35,15 @@
     <%= f.label :composer %><br>
     <%= f.text_field :composer %>
   </div>
+
+  <p><h1>Album:</h1>
+    <%= f.fields_for :albums do |album_form| %>
+      <div class="field">
+        <%= album_form.label :album_name %><br>
+        <%= album_form.text_field :album_name %>
+      </div>
+    <% end %>  </p>
+
   <div class="actions">
     <%= f.submit %>
   </div>

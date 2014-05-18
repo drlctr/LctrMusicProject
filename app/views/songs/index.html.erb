@@ -5,8 +5,8 @@
   <table border="1">
     <tr>
       <th>Song Title</th>
-      <th>Artist</th>
       <th>Album Title</th>
+      <th>Artist</th>
       <th>Track</th>
       <th>Duration</th>
       <th>Genre</th>
@@ -24,15 +24,19 @@
     <% @songs.each do |song| %>
       <tr>
         <td><%= song.song_title %></td>
-        <td><i>Artist</i></td>
-        <td><i>Album</i></td>
+        <td><%= song.album.album_title %></td>
+        <td><%= song.album.artist.name %></td>
         <td><%= song.track %></td>
         <td><%= song.durationmin %></td>
-        <td><i>Genre</i></td>
+        <td><%= song.album.genre %></td>
         <td><%= song.path %></td>
         <td><%= song.filename %></td>
         <td><%= song.composer %></td>
-        <td><i>Musicians</i></td>
+        <td><center>
+          <% song.musicians.map do |m| %>
+            <%= "#{m.first_name} #{m.last_name}" %><br>
+          <% end %>
+        </center></td>
         <td><%= link_to 'Show', song %></td>
         <td><%= link_to 'Edit', edit_song_path(song) %></td>
         <td><%= link_to 'Destroy', song, method: :delete, data: { confirm: 'Are you sure?' } %></td>
