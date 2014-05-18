@@ -37,7 +37,7 @@ Musician.create [
 	{:first_name => "Nick", :last_name => "Cash", :born => ""},
 	{:first_name => "Guy", :last_name => "Days", :born => ""},
 	{:first_name => "Pablo", :last_name => "LaBritain", :born => ""},
-	{:first_name => "Arturo", :last_name => "Bassick", :born => ""},
+	{:first_name => "John", :last_name => "Watson", :born => ""},
 	{:first_name => "Frank", :last_name => "Sinatra", :born => "1915"},
 	{:first_name => "Leonard", :last_name => "Bernstein", :born => "1918"}]
 
@@ -56,3 +56,30 @@ Session.create [
 	{:song_id => 5, :musician_id => 4},
 	{:song_id => 6, :musician_id => 9},
 	{:song_id => 7, :musician_id => 10}]
+
+Instrument.create [
+	{:name => "Vocals"},
+	{:name => "Guitar"},
+	{:name => "Guitar - Lead"},
+	{:name => "Guitar - Rhythm"},
+	{:name => "Bass"},
+	{:name => "Drums"},
+	{:name => "Keyboards"},
+	{:name => "Conductor"}]
+
+Ability.create [
+	{:musician_id =>1, :instrument_id => 1},
+	{:musician_id =>1, :instrument_id => 2},
+	{:musician_id =>2, :instrument_id => 1},
+	{:musician_id =>2, :instrument_id => 6},
+	{:musician_id =>3, :instrument_id => 5},
+	{:musician_id =>4, :instrument_id => 1},
+	{:musician_id =>4, :instrument_id => 4},
+	{:musician_id =>4, :instrument_id => 7},
+	{:musician_id =>5, :instrument_id => 1},
+	{:musician_id =>5, :instrument_id => 2},
+	{:musician_id =>6, :instrument_id => 3},
+	{:musician_id =>7, :instrument_id => 6},
+	{:musician_id =>8, :instrument_id => 5},
+	{:musician_id =>9, :instrument_id => 1},
+	{:musician_id =>10, :instrument_id => 8}]
