@@ -28,3 +28,31 @@ Artist.create [
 	{:name => "999", :nationality => "UK"},
 	{:name => "Frank Sinatra", :nationality => "USA"},
 	{:name => "Leonard Bernstein", :nationality => "USA"}]
+
+Musician.create [
+	{:first_name => "Bob", :last_name => "Mould", :born => "1960"},
+	{:first_name => "Grant", :last_name => "Hart", :born => "1961"},
+	{:first_name => "Greg", :last_name => "Norton", :born => "1959"},
+	{:first_name => "Aimee", :last_name => "Mann", :born => "1960"},
+	{:first_name => "Nick", :last_name => "Cash", :born => ""},
+	{:first_name => "Guy", :last_name => "Days", :born => ""},
+	{:first_name => "Pablo", :last_name => "LaBritain", :born => ""},
+	{:first_name => "Arturo", :last_name => "Bassick", :born => ""},
+	{:first_name => "Frank", :last_name => "Sinatra", :born => "1915"},
+	{:first_name => "Leonard", :last_name => "Bernstein", :born => "1918"}]
+
+Session.create [
+  {:song_id => 1, :musician_id => 1},
+  {:song_id => 1, :musician_id => 2},
+	{:song_id => 1, :musician_id => 3},
+  {:song_id => 2, :musician_id => 1},
+  {:song_id => 2, :musician_id => 2},
+	{:song_id => 2, :musician_id => 3},
+	{:song_id => 3, :musician_id => 4},
+	{:song_id => 4, :musician_id => 5},
+	{:song_id => 4, :musician_id => 6},
+	{:song_id => 4, :musician_id => 7},
+	{:song_id => 4, :musician_id => 8},
+	{:song_id => 5, :musician_id => 4},
+	{:song_id => 6, :musician_id => 9},
+	{:song_id => 7, :musician_id => 10}]
