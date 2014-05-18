@@ -1,5 +1,7 @@
 class Song < ActiveRecord::Base
 
+	belongs_to :album
+
 validates :song_title, presence:  true
 validates :track, 
 	:numericality => {:greater_than => 0, :only_integer => true}
