@@ -22,4 +22,3 @@ describe Album do
   end
   
 end
-
