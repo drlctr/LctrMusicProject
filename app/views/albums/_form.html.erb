@@ -11,6 +11,23 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= f.label :album_title %><br>
+    <%= f.text_field :album_title %>
+  </div>
+  <div class="field">
+    <%= f.label :genre %><br>
+    <%= f.text_field :genre %>
+  </div>
+  <div class="field">
+    <%= f.label :year %><br>
+    <%= f.number_field :year %>
+  </div>
+  <div class="field">
+    <%= f.label :protected %><br>
+    <%= f.check_box :protected %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

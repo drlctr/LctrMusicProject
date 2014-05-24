@@ -4,7 +4,7 @@ class AlbumsController < ApplicationController
   # GET /albums
   # GET /albums.json
   def index
-    @albums = Album.all
+    @albums = Album.find(:all, :joins => :artist, :order => 'artists.name')
   end
 
   # GET /albums/1
@@ -69,6 +69,6 @@ class AlbumsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def album_params
-      params[:album]
+      params.require(:album).permit(:album_title, :year, :genre, :protected)
     end
 end
