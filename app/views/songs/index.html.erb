@@ -34,7 +34,8 @@
         <td><%= song.composer %></td>
         <td><center>
           <% song.musicians.map do |m| %>
-            <%= "#{m.first_name} #{m.last_name}" %><br>
+            <%= "#{m.first_name} #{m.last_name} -  
+              #{m.instruments.collect{|i| i.name}.join ', '}" %><br>
           <% end %>
         </center></td>
         <td><%= link_to 'Show', song %></td>
