@@ -24,7 +24,18 @@ class AlbumsController < ApplicationController
   # POST /albums
   # POST /albums.json
   def create
+
+    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
+      puts "Yup.  They exist."
+      a = Artist.where(name: params[:artist_name])
+      puts "Artist id = #{a[0].id}"
+      artist_id = a[0].id
+    end
+
     @album = Album.new(album_params)
+    @album.artist_id = artist_id
+    puts "the album's artist_id should be #{artist_id}"
+    puts "the album's artist_id is #{@album.artist_id}"
 
     respond_to do |format|
       if @album.save
@@ -69,6 +80,6 @@ class AlbumsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def album_params
-      params.require(:album).permit(:album_title, :year, :genre, :protected)
+      params.require(:album).permit(:album_title, :year, :genre, :protected, :artist_id)
     end
 end
