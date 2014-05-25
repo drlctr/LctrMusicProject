@@ -1,4 +1,6 @@
 MusicProject::Application.routes.draw do
+  resources :artists
+
   resources :albums
 
   resources :songs
@@ -8,6 +10,7 @@ MusicProject::Application.routes.draw do
 
   get '/purchase', to:  'home#amazon'
   get '/created', to: 'home#created'
+  get '/blank_artist', to: 'albums#blank_artist'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

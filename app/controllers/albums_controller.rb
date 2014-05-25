@@ -26,16 +26,21 @@ class AlbumsController < ApplicationController
   def create
 
     if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
-      puts "Yup.  They exist."
       a = Artist.where(name: params[:artist_name])
-      puts "Artist id = #{a[0].id}"
       artist_id = a[0].id
+    else
+      @artist=Artist.new(name: params[:artist_name])
+      if @artist.name.empty?
+        redirect_to action: :blank_artist and return
+      elsif @artist.save!
+        format.html { render action: 'new' }
+        format.json { render json: @artist.errors, status: :unprocessable_entity }
+      end
+      artist_id = @artist.id
     end
 
     @album = Album.new(album_params)
     @album.artist_id = artist_id
-    puts "the album's artist_id should be #{artist_id}"
-    puts "the album's artist_id is #{@album.artist_id}"
 
     respond_to do |format|
       if @album.save
@@ -82,4 +87,8 @@ class AlbumsController < ApplicationController
     def album_params
       params.require(:album).permit(:album_title, :year, :genre, :protected, :artist_id)
     end
+
+    def blank_artist
+    end
+
 end
