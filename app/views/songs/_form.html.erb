@@ -12,39 +12,46 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :song_title %><br>
+    <%= f.label :song_title %>*<br>
     <%= f.text_field :song_title %>
   </div>
   <div class="field">
-    <%= f.label :track %><br>
+    Artist*<br>
+    <%= text_field_tag 'artist_name' %>
+  </div>
+  <div class="field">
+    Album*<br>
+    <%= text_field_tag 'album_name' %>
+  </div>    
+  <div class="field">
+    <%= f.label :track %>*<br>
     <%= f.number_field :track %>
   </div>
   <div class="field">
-    <%= f.label :duration %><br>
+    <%= f.label :duration %>*<br>
     <%= f.number_field :duration %>
   </div>
   <div class="field">
-    <%= f.label :path %><br>
+    Genre*<br>
+    <%= text_field_tag 'genre' %>
+  </div>  
+  <div class="field">
+    <%= f.label :path %>*<br>
     <%= f.text_field :path %>
   </div>
   <div class="field">
-    <%= f.label :filename %><br>
+    <%= f.label :filename %>*<br>
     <%= f.text_field :filename %>
   </div>
   <div class="field">
     <%= f.label :composer %><br>
     <%= f.text_field :composer %>
   </div>
-
-  <p><h1>Album:</h1>
-    <%= f.fields_for :albums do |album_form| %>
-      <div class="field">
-        <%= album_form.label :album_name %><br>
-        <%= album_form.text_field :album_name %>
-      </div>
-    <% end %>  </p>
-
   <div class="actions">
     <%= f.submit %>
   </div>
+  <div>
+  <h3>* - Fields marked with an asterix are required.</h3>
+  </div>
+
 <% end %>
