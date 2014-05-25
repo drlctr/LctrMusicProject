@@ -32,37 +32,29 @@ class SongsController < ApplicationController
     if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
       a = Artist.where(name: params[:artist_name])
       artist_id = a[0].id
-      puts "Yep.  The Artist is here.  artist_id = #{artist_id}"
     else
       @artist=Artist.new(name: params[:artist_name])
       if @artist.name.empty?
-        redirect_to action: :blank_artist and return
+        redirect_to action: :blank_album_data and return
       elsif !@artist.save
         format.html { render action: 'new' }
         format.json { render json: @artist.errors, status: :unprocessable_entity }
       end
       artist_id = @artist.id
-      puts "Nope.  Artist wasn't there.  New artist_id = #{artist_id}"
     end
 
     if Album.all.collect{|a| a.album_title}.include? params[:album_name] 
-
       a = Album.where(album_title: params[:album_name])
       album_id = a[0].id
-      puts "Yep.  The Album is here.  album_id = #{album_id}, artist_id = #{artist_id}"
     else
       @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
-      puts "creating a new album with album title:  #{params[:album_name]},
-        genre:  #{params[:genre]}, artist_id: #{artist_id}"
       if @album.album_title.empty?||@album.genre.empty?
         redirect_to action: :blank_album_data and return
       elsif !@album.save
-        puts "In the failed album save branch."
         format.html { render action: 'new' }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
       album_id = @album.id
-      puts "Nope.  Album wasn't there.  New album_id = #{album_id}"
     end
 
 
