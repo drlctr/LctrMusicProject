@@ -3,12 +3,18 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.4'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
-
 group :test, :development do
 	gem 'rspec-rails'
   gem 'factory_girl_rails'
+	# Use sqlite3 as the database for Active Record
+  gem 'sqlite3'
+end
+
+group :production do
+	# Add the gem for Heroku
+	gem 'rails_12factor'
+	# Use postgres for Heroku
+	gem 'pg'
 end
 
 gem 'validates_timeliness', '~> 3.0'
