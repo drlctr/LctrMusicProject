@@ -21,7 +21,7 @@
   </div>
     <div class="field">
     Artist<br>
-    <%= text_field_tag 'artist_name' %>
+    <%= text_field_tag 'artist_name', @album.artist.name || ""%>
   </div>
   <div class="field">
     <%= f.label :year %><br>

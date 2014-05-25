@@ -17,11 +17,11 @@
   </div>
   <div class="field">
     Artist*<br>
-    <%= text_field_tag 'artist_name' %>
+    <%= text_field_tag 'artist_name',@song.album.artist.name || ""%>
   </div>
   <div class="field">
     Album*<br>
-    <%= text_field_tag 'album_name' %>
+    <%= text_field_tag 'album_name', @song.album.album_title || ""%>
   </div>    
   <div class="field">
     <%= f.label :track %>*<br>
@@ -33,7 +33,7 @@
   </div>
   <div class="field">
     Genre*<br>
-    <%= text_field_tag 'genre' %>
+    <%= text_field_tag 'genre', @song.album.genre || "" %>
   </div>  
   <div class="field">
     <%= f.label :path %>*<br>
