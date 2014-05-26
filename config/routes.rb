@@ -1,4 +1,5 @@
 MusicProject::Application.routes.draw do
+  devise_for :users
   resources :artists
 
   resources :albums
