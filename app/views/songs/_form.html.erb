@@ -11,17 +11,27 @@
     </div>
   <% end %>
 
+  <% unless @song.album.nil? %>
+    <% exist_artist_name = @song.album.artist.name %>
+    <% exist_album_title = @song.album.album_title %>
+    <% exist_album_genre = @song.album.genre %>
+  <% else %>
+    <% exist_artist_name = "" %>
+    <% exist_album_title = "" %>
+    <% exist_album_genre = "" %>
+  <% end %>
+
   <div class="field">
     <%= f.label :song_title %>*<br>
     <%= f.text_field :song_title %>
   </div>
   <div class="field">
     Artist*<br>
-    <%= text_field_tag 'artist_name',@song.album.artist.name || ""%>
+    <%= text_field_tag 'artist_name',exist_artist_name %><br>
   </div>
   <div class="field">
     Album*<br>
-    <%= text_field_tag 'album_name', @song.album.album_title || ""%>
+    <%= text_field_tag 'album_name', exist_album_title %>
   </div>    
   <div class="field">
     <%= f.label :track %>*<br>
@@ -33,7 +43,7 @@
   </div>
   <div class="field">
     Genre*<br>
-    <%= text_field_tag 'genre', @song.album.genre || "" %>
+    <%= text_field_tag 'genre', exist_album_genre %>
   </div>  
   <div class="field">
     <%= f.label :path %>*<br>

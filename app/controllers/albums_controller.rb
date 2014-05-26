@@ -56,7 +56,23 @@ class AlbumsController < ApplicationController
   # PATCH/PUT /albums/1
   # PATCH/PUT /albums/1.json
   def update
+
+    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
+      a = Artist.where(name: params[:artist_name])
+      artist_id = a[0].id
+    else
+      @artist=Artist.new(name: params[:artist_name])
+      if @artist.name.empty?
+        redirect_to action: :blank_artist and return
+      else 
+        @artist.save!
+      end
+      artist_id = @artist.id
+    end
+
+
     respond_to do |format|
+      @album.artist_id = artist_id
       if @album.update(album_params)
         format.html { redirect_to @album, notice: 'Album was successfully updated.' }
         format.json { head :no_content }

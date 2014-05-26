@@ -76,7 +76,60 @@ class SongsController < ApplicationController
   # PATCH/PUT /songs/1
   # PATCH/PUT /songs/1.json
   def update
+
+    # @album = Album.find(@song.album_id)
+    # @album.album_title = params[:album_name]
+    # if @album.album_title.empty?
+    #   redirect_to action: :blank_album_data and return
+    # else 
+    #   @album.save
+    # end
+
+    # @artist = Artist.find(@album.artist_id)
+    # @artist.name = params[:artist_name]
+    # if @artist.name.empty?
+    #   redirect_to action: :blank_album_data and return
+    # else 
+    #   @artist.save
+    # end
+
+    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
+      a = Artist.where(name: params[:artist_name])
+      artist_id = a[0].id
+    else
+      @artist=Artist.new(name: params[:artist_name])
+      if @artist.name.empty?
+        redirect_to action: :blank_album_data and return
+      elsif !@artist.save
+        format.html { render action: 'new' }
+        format.json { render json: @artist.errors, status: :unprocessable_entity }
+      end
+      artist_id = @artist.id
+    end
+
+    if Album.all.collect{|a| a.album_title}.include? params[:album_name] 
+      a = Album.where(album_title: params[:album_name])
+      album_id = a[0].id
+    else
+      @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
+      if @album.album_title.empty?||@album.genre.empty?
+        redirect_to action: :blank_album_data and return
+      else
+       @album.save
+      end
+      album_id = @album.id
+    end
+
     respond_to do |format|
+
+      @song.album_id = album_id
+      a = @song.album
+      puts "Old artist_id = #{a.artist_id}"
+      a.artist_id = artist_id
+      puts "New artist_id = #{a.artist_id}"
+      puts "Album is #{a.album_title}"
+      a.save
+      
       if @song.update(song_params)
         format.html { redirect_to @song, notice: 'Song was successfully updated.' }
         format.json { head :no_content }
