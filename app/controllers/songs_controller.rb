@@ -1,5 +1,6 @@
 class SongsController < ApplicationController
   before_action :set_song, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   #before_action :edit_warning, only: :edit
 
@@ -129,7 +130,7 @@ class SongsController < ApplicationController
       puts "New artist_id = #{a.artist_id}"
       puts "Album is #{a.album_title}"
       a.save
-      
+
       if @song.update(song_params)
         format.html { redirect_to @song, notice: 'Song was successfully updated.' }
         format.json { head :no_content }
