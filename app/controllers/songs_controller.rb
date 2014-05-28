@@ -16,6 +16,18 @@ class SongsController < ApplicationController
   def show
   end
 
+  # GET /tag_entry
+  def tag_entry
+    @tag_file_name = params[:tag_file_name]
+    path = File.join(Rails.root, @tag_file_name)
+    @tag = ID3.new(path)
+    puts "Artist = #{@tag.artist}"
+    puts "Album = #{@tag.album_title}"
+    puts "Song Title = #{@tag.song_title}"
+    puts "Song Title Class = #{@tag.song_title.class}"
+    @song=Song.new
+  end
+
   # GET /songs/new
   def new
     @song = Song.new

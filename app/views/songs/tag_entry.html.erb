@@ -1,0 +1,59 @@
+<h1> Welcome to the tag entry page!!</h1>
+
+<%= form_for(@song) do |f| %>
+  <% if @song.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@song.errors.count, "error") %> prohibited this song from being saved:</h2>
+
+      <ul>
+      <% @song.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :song_title %>*<br>
+    <%= f.text_field :song_title, :value => @tag.song_title %>
+  </div>
+  <div class="field">
+    Artist*<br>
+    <%= text_field_tag 'artist_name', @tag.artist %><br>
+  </div>
+  <div class="field">
+    Album*<br>
+    <%= text_field_tag 'album_name', @tag.album_title %>
+  </div>    
+  <div class="field">
+    <%= f.label :track %>*<br>
+    <%= f.text_field :track, :value => @tag.track %>
+  </div>
+  <div class="field">
+    <%= f.label :duration %>*<br>
+    <%= f.number_field :duration %>
+  </div>
+  <div class="field">
+    Genre*<br>
+    <%= text_field_tag 'genre' %>
+  </div>  
+  <div class="field">
+    <%= f.label :path %>*<br>
+    <%= f.text_field :path, :value => File.join(Rails.root, @tag_file_name) %>
+  </div>
+  <div class="field">
+    <%= f.label :filename %>*<br>
+    <%= f.text_field :filename, :value => @tag_file_name %>
+  </div>
+  <div class="field">
+    <%= f.label :composer %><br>
+    <%= f.text_field :composer %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+  <div>
+  <h3>* - Fields marked with an asterix are required.</h3>
+  </div>
+
+<% end %>

@@ -13,6 +13,7 @@ MusicProject::Application.routes.draw do
   get '/created', to: 'home#created'
   get '/blank_artist', to: 'albums#blank_artist'
   get '/blank_album_data', to:  'songs#blank_album_data'
+  post '/tag_entry', to: 'songs#tag_entry'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

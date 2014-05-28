@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.4'
 
+# Add my id3 tag reader tem
+gem 'lctr_mp3', '0.0.3'
+
 # Use Devise for user and admin authentication and authorization
 gem 'devise'
 
