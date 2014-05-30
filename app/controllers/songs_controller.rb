@@ -20,11 +20,16 @@ class SongsController < ApplicationController
   def tag_entry
     @tag_file_name = params[:tag_file_name]
     path = File.expand_path("~/#{@tag_file_name}")
-    @tag = ID3.new(path)
-    puts "Artist = #{@tag.artist}"
-    puts "Album = #{@tag.album_title}"
-    puts "Song Title = #{@tag.song_title}"
-    puts "Song Title Class = #{@tag.song_title.class}"
+    begin
+      @tag = ID3.new(path)
+      # puts "Artist = #{@tag.artist}"
+      # puts "Album = #{@tag.album_title}"
+      # puts "Song Title = #{@tag.song_title}"
+      # puts "Song Title Class = #{@tag.song_title.class}"
+    rescue
+      @err_msg = "Bad .mp3 file name.  Unable to open file."
+      render action: :song_error and return
+    end
     @song=Song.new
   end
 
@@ -47,7 +52,8 @@ class SongsController < ApplicationController
     else
       @artist=Artist.new(name: params[:artist_name])
       if @artist.name.empty?
-        redirect_to action: :blank_album_data and return
+        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+        render action: :song_error and return
       elsif !@artist.save
         format.html { render action: 'new' }
         format.json { render json: @artist.errors, status: :unprocessable_entity }
@@ -61,7 +67,8 @@ class SongsController < ApplicationController
     else
       @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
       if @album.album_title.empty?||@album.genre.empty?
-        redirect_to action: :blank_album_data and return
+       @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+        render action: :song_error and return
       elsif !@album.save
         format.html { render action: 'new' }
         format.json { render json: @album.errors, status: :unprocessable_entity }
@@ -76,7 +83,6 @@ class SongsController < ApplicationController
     respond_to do |format|
       if @song.save
         format.html { render '/shared/created'}
-        #format.html { redirect_to @song, notice: 'Song was successfully created.' }
         format.json { render action: 'show', status: :created, location: @song }
       else
         format.html { render action: 'new' }
@@ -95,7 +101,8 @@ class SongsController < ApplicationController
     else
       @artist=Artist.new(name: params[:artist_name])
       if @artist.name.empty?
-        redirect_to action: :blank_album_data and return
+        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+        render action: :song_error and return
       elsif !@artist.save
         format.html { render action: 'new' }
         format.json { render json: @artist.errors, status: :unprocessable_entity }
@@ -109,7 +116,8 @@ class SongsController < ApplicationController
     else
       @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
       if @album.album_title.empty?||@album.genre.empty?
-        redirect_to action: :blank_album_data and return
+        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+        render action: :song_error and return
       else
        @album.save
       end
@@ -157,6 +165,8 @@ class SongsController < ApplicationController
       params.require(:song).permit(:song_title, :track, :duration, :path, :filename, :composer)
     end
 
-    def blank_album_data
+    def song_error
+      puts "In song_error method, @err_msg = #{@err_msg}"
     end
+
 end
