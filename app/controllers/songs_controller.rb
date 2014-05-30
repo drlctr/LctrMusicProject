@@ -19,7 +19,7 @@ class SongsController < ApplicationController
   # GET /tag_entry
   def tag_entry
     @tag_file_name = params[:tag_file_name]
-    path = File.join(Rails.root, @tag_file_name)
+    path = File.expand_path("~/#{@tag_file_name}")
     @tag = ID3.new(path)
     puts "Artist = #{@tag.artist}"
     puts "Album = #{@tag.album_title}"
@@ -88,22 +88,6 @@ class SongsController < ApplicationController
   # PATCH/PUT /songs/1
   # PATCH/PUT /songs/1.json
   def update
-
-    # @album = Album.find(@song.album_id)
-    # @album.album_title = params[:album_name]
-    # if @album.album_title.empty?
-    #   redirect_to action: :blank_album_data and return
-    # else 
-    #   @album.save
-    # end
-
-    # @artist = Artist.find(@album.artist_id)
-    # @artist.name = params[:artist_name]
-    # if @artist.name.empty?
-    #   redirect_to action: :blank_album_data and return
-    # else 
-    #   @artist.save
-    # end
 
     if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
       a = Artist.where(name: params[:artist_name])
