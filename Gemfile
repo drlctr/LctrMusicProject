@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.4'
 
 # Add my id3 tag reader tem
-gem 'lctr_mp3', '0.0.3'
+gem 'lctr_mp3', '0.0.4'
 
 # Use Devise for user and admin authentication and authorization
 gem 'devise'
