@@ -16,6 +16,11 @@ FactoryGirl.define do
 		nationality	'USA'
 	end
 
+	factory :invalid_artist do
+		name        ''
+		nationality 'Invalid'
+	end
+
 	factory :album do
 		artist
 		id          '1'

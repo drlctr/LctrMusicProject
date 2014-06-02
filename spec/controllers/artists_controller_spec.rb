@@ -34,6 +34,7 @@ describe ArtistsController do
     some_user = FactoryGirl.create(:user)
     sign_in some_user
     @artist = FactoryGirl.create(:artist)
+    @invalid_artist = FactoryGirl.build(:invalid_artist)
   end
 
   describe "GET index" do
