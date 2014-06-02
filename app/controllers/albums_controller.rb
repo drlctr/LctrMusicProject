@@ -5,7 +5,7 @@ class AlbumsController < ApplicationController
   # GET /albums
   # GET /albums.json
   def index
-    @albums = Album.find(:all, :joins => :artist, :order => 'artists.name')
+    @albums = Album.sorted
   end
 
   # GET /albums/1
@@ -26,19 +26,7 @@ class AlbumsController < ApplicationController
   # POST /albums.json
   def create
 
-    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
-      a = Artist.where(name: params[:artist_name])
-      artist_id = a[0].id
-    else
-      @artist=Artist.new(name: params[:artist_name])
-      if @artist.name.empty?
-        redirect_to action: :blank_artist and return
-      elsif @artist.save!
-        format.html { render action: 'new' }
-        format.json { render json: @artist.errors, status: :unprocessable_entity }
-      end
-      artist_id = @artist.id
-    end
+    artist_id = artist_exist_or_new(params[:artist_name])
 
     @album = Album.new(album_params)
     @album.artist_id = artist_id
@@ -58,18 +46,7 @@ class AlbumsController < ApplicationController
   # PATCH/PUT /albums/1.json
   def update
 
-    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
-      a = Artist.where(name: params[:artist_name])
-      artist_id = a[0].id
-    else
-      @artist=Artist.new(name: params[:artist_name])
-      if @artist.name.empty?
-        redirect_to action: :blank_artist and return
-      else 
-        @artist.save!
-      end
-      artist_id = @artist.id
-    end
+    artist_id = update_artist_exist_or_new(params[:artist_name])
 
 
     respond_to do |format|
@@ -106,6 +83,38 @@ class AlbumsController < ApplicationController
     end
 
     def blank_artist
+    end
+
+    def artist_exist_or_new(artist_name)
+      if Artist.all.collect{|a| a.name}.include? artist_name 
+        a = Artist.where(name: artist_name)
+        artist_id = a[0].id
+      else
+        @artist=Artist.new(name: artist_name)
+        if @artist.name.empty?
+          redirect_to action: :blank_artist and return
+        elsif @artist.save!
+          format.html { render action: 'new'}
+          format.json { render json: @artist.errors, status: :unprocessable_entity }
+        end
+        artist_id = @artist.id
+      end
+    end
+
+    def update_artist_exist_or_new(artist_name)
+      if Artist.all.collect{|a| a.name}.include? artist_name
+        a = Artist.where(name: artist_name)
+        artist_id = a[0].id
+      else
+        # params[:artist_name] = "Fred"
+        @artist=Artist.new(name: artist_name)
+        if @artist.name.empty?
+          redirect_to action: :blank_artist and return
+        else 
+          @artist.save!
+        end
+        artist_id = @artist.id
+      end
     end
 
 end

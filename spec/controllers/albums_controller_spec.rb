@@ -20,29 +20,42 @@ require 'spec_helper'
 
 describe AlbumsController do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Album. As you add validations to Album, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) { {:album_title => "Title", :genre => "Genre"} }
+
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # AlbumsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before :each do
+    #FactoryGirl.lint
+    some_user = FactoryGirl.create(:user)
+    sign_in some_user
+    @album = FactoryGirl.create(:album)
+    @artist=FactoryGirl.create(:artist)
+  end
+
   describe "GET index" do
     it "assigns all albums as @albums" do
-      album = Album.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:albums).should eq([album])
+      assigns(:albums).should eq([@album])
+    end
+
+    it "renders the :index view" do
+      get :index, {}, valid_session
+      response.should render_template :index
     end
   end
 
   describe "GET show" do
     it "assigns the requested album as @album" do
-      album = Album.create! valid_attributes
-      get :show, {:id => album.to_param}, valid_session
-      assigns(:album).should eq(album)
+      get :show, {:id => @album.to_param, :album => {"name" => "Test_name"}}, valid_session
+      assigns(:album).should eq(@album)
+    end
+
+    it "renders the #show view" do
+      get :show, {:id => @album.to_param}, valid_session
+      response.should render_template :show
     end
   end
 
@@ -51,13 +64,22 @@ describe AlbumsController do
       get :new, {}, valid_session
       assigns(:album).should be_a_new(Album)
     end
+
+    it "should render the #new view" do
+      get :new, {}, valid_session
+      response.should render_template :new
+    end
   end
 
   describe "GET edit" do
     it "assigns the requested album as @album" do
-      album = Album.create! valid_attributes
-      get :edit, {:id => album.to_param}, valid_session
-      assigns(:album).should eq(album)
+      get :edit, {:id => @album.to_param}, valid_session
+      assigns(:album).should eq(@album)
+    end
+
+    it "should render the #edit view" do
+      get :edit, {:id => @album.to_param}, valid_session
+      response.should render_template :edit
     end
   end
 
@@ -65,18 +87,20 @@ describe AlbumsController do
     describe "with valid params" do
       it "creates a new Album" do
         expect {
-          post :create, {:album => valid_attributes}, valid_session
+          # post :create, album: FactoryGirl.attributes_for(:album)
+          # }.to change(Album, :count).by(1)
+          post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
         }.to change(Album, :count).by(1)
       end
 
       it "assigns a newly created album as @album" do
-        post :create, {:album => valid_attributes}, valid_session
+        post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
         assigns(:album).should be_a(Album)
         assigns(:album).should be_persisted
       end
 
       it "redirects to the created album" do
-        post :create, {:album => valid_attributes}, valid_session
+        post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
         response.should redirect_to(Album.last)
       end
     end
@@ -85,14 +109,14 @@ describe AlbumsController do
       it "assigns a newly created but unsaved album as @album" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        post :create, {:album => {  }}, valid_session
+        post :create, {:album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
         assigns(:album).should be_a_new(Album)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        post :create, {:album => {  }}, valid_session
+        post :create, {:album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
         response.should render_template("new")
       end
     end
@@ -101,42 +125,38 @@ describe AlbumsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested album" do
-        album = Album.create! valid_attributes
         # Assuming there are no other albums in the database, this
         # specifies that the Album created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Album.any_instance.should_receive(:update).with({ "these" => "params" })
-        put :update, {:id => album.to_param, :album => { "these" => "params" }}, valid_session
+        #Album.any_instance.should_receive(:update).with({ "these" => "params" })
+        Album.any_instance.should_receive(:update).with({ "album_title" => "Test_title" })
+        put :update, {:id => @album.to_param, :album => { "album_title" => "Test_title" }, :artist_name => @artist.name}, valid_session
       end
 
       it "assigns the requested album as @album" do
-        album = Album.create! valid_attributes
-        put :update, {:id => album.to_param, :album => valid_attributes}, valid_session
-        assigns(:album).should eq(album)
+        put :update, {:id => @album.to_param, :album => {"album_title" => "Test_title"}, :artist_name => @artist.name}, valid_session
+        assigns(:album).should eq(@album)
       end
 
       it "redirects to the album" do
-        album = Album.create! valid_attributes
-        put :update, {:id => album.to_param, :album => valid_attributes}, valid_session
-        response.should redirect_to(album)
+        put :update, {:id => @album.to_param, :album => {"album_title" => "Test_name"}, :artist_name => @artist.name}, valid_session
+        response.should redirect_to(@album)
       end
     end
 
     describe "with invalid params" do
       it "assigns the album as @album" do
-        album = Album.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        put :update, {:id => album.to_param, :album => {  }}, valid_session
-        assigns(:album).should eq(album)
+        put :update, {:id => @album.to_param, :album => {"album_title" => "" }, :artist_name => @artist.name}, valid_session
+        assigns(:album).should eq(@album)
       end
 
       it "re-renders the 'edit' template" do
-        album = Album.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        put :update, {:id => album.to_param, :album => {  }}, valid_session
+        put :update, {:id => @album.to_param, :album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
         response.should render_template("edit")
       end
     end
@@ -144,15 +164,13 @@ describe AlbumsController do
 
   describe "DELETE destroy" do
     it "destroys the requested album" do
-      album = Album.create! valid_attributes
       expect {
-        delete :destroy, {:id => album.to_param}, valid_session
+        delete :destroy, {:id => @album.to_param}, valid_session
       }.to change(Album, :count).by(-1)
     end
 
     it "redirects to the albums list" do
-      album = Album.create! valid_attributes
-      delete :destroy, {:id => album.to_param}, valid_session
+      delete :destroy, {:id => @album.to_param}, valid_session
       response.should redirect_to(albums_url)
     end
   end

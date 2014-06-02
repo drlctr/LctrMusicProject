@@ -5,7 +5,7 @@ FactoryGirl.define do
 	end
 
 	factory :musician do
-		instrument
+		#instrument
 		first_name 	'John'
 		last_name		'Smith'
 		born				'1962'
@@ -26,7 +26,7 @@ FactoryGirl.define do
 	end
 
 	factory :song do
-		album
+		#album
 		song_title  'Test_song'
 		track       '1/10'
 		duration    '180'

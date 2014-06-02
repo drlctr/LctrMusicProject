@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <% @album.artist.nil? ? exist_artist_name = "" : exist_artist_name = @album.artist.name %>
+
   <div class="field">
     <%= f.label :album_title %><br>
     <%= f.text_field :album_title %>
@@ -21,7 +23,7 @@
   </div>
     <div class="field">
     Artist<br>
-    <%= text_field_tag 'artist_name', @album.artist.name || ""%>
+    <%= text_field_tag 'artist_name', exist_artist_name %>
   </div>
   <div class="field">
     <%= f.label :year %><br>
