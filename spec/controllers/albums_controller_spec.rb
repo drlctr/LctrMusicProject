@@ -32,6 +32,7 @@ describe AlbumsController do
     some_user = FactoryGirl.create(:user)
     sign_in some_user
     @album = FactoryGirl.create(:album)
+    @invalid_album = FactoryGirl.build(:invalid_album)
     @artist=FactoryGirl.create(:artist)
   end
 
@@ -87,20 +88,18 @@ describe AlbumsController do
     describe "with valid params" do
       it "creates a new Album" do
         expect {
-          # post :create, album: FactoryGirl.attributes_for(:album)
-          # }.to change(Album, :count).by(1)
-          post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
+          post :create, {:album => FactoryGirl.attributes_for(:album), :artist_name => @artist.name}, valid_session
         }.to change(Album, :count).by(1)
       end
 
       it "assigns a newly created album as @album" do
-        post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
+        post :create, {:album => FactoryGirl.attributes_for(:album), :artist_name => @artist.name}, valid_session
         assigns(:album).should be_a(Album)
         assigns(:album).should be_persisted
       end
 
       it "redirects to the created album" do
-        post :create, {:album => {"album_title" => "Test_name", "genre" => "test_genre"}, :artist_name => @artist.name}, valid_session
+        post :create, {:album => FactoryGirl.attributes_for(:album), :artist_name => @artist.name}, valid_session
         response.should redirect_to(Album.last)
       end
     end
@@ -109,14 +108,20 @@ describe AlbumsController do
       it "assigns a newly created but unsaved album as @album" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        post :create, {:album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
+        post :create, {:album => FactoryGirl.attributes_for(:invalid_album), :artist_name => @artist.name}, valid_session
         assigns(:album).should be_a_new(Album)
+      end
+
+      it "does not save the new album" do
+        expect{
+          post :create, {:album => FactoryGirl.attributes_for(:invalid_album), :artist_name => @artist.name}, valid_session 
+        }.to_not change(Album, :count)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        post :create, {:album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
+        post :create, {:album => FactoryGirl.attributes_for(:invalid_album), :artist_name => @artist.name}, valid_session
         response.should render_template("new")
       end
     end
@@ -124,39 +129,80 @@ describe AlbumsController do
 
   describe "PUT update" do
     describe "with valid params" do
+
+      it "locates the requested album" do
+        put :update, {id: @album, album: FactoryGirl.attributes_for(:album), :artist_name => @artist.name}, valid_session
+        assigns(:album).should eq(@album)
+      end
+
       it "updates the requested album" do
         # Assuming there are no other albums in the database, this
         # specifies that the Album created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        #Album.any_instance.should_receive(:update).with({ "these" => "params" })
-        Album.any_instance.should_receive(:update).with({ "album_title" => "Test_title" })
-        put :update, {:id => @album.to_param, :album => { "album_title" => "Test_title" }, :artist_name => @artist.name}, valid_session
+        Album.any_instance.should_receive(:update).with(
+          {"album_title" => "Test_change", "year" => "1988", "genre" => "Test_genre", "protected" => "false"})
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:album, album_title: 'Test_change'),
+          :artist_name => @artist.name}, valid_session
+      end
+
+      it "changes the album's attributes" do
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:album, album_title: 'Test_change'),
+          :artist_name => @artist.name}, valid_session
+        @album.reload
+        @album.album_title.should eq('Test_change')
       end
 
       it "assigns the requested album as @album" do
-        put :update, {:id => @album.to_param, :album => {"album_title" => "Test_title"}, :artist_name => @artist.name}, valid_session
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:album, album_title: 'Test_change'), 
+          :artist_name => @artist.name}, valid_session
         assigns(:album).should eq(@album)
       end
 
       it "redirects to the album" do
-        put :update, {:id => @album.to_param, :album => {"album_title" => "Test_name"}, :artist_name => @artist.name}, valid_session
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:album, album_title: 'Test_change'), 
+          :artist_name => @artist.name}, valid_session
         response.should redirect_to(@album)
       end
     end
 
     describe "with invalid params" do
+
+      it "locates the requested album" do
+        put :update, {id: @album, 
+          album: FactoryGirl.attributes_for(:invalid_album), 
+          :artist_name => @artist.name}, valid_session
+        assigns(:album).should eq(@album)
+      end
+
       it "assigns the album as @album" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @album.to_param, :album => {"album_title" => "" }, :artist_name => @artist.name}, valid_session
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:invalid_album), 
+          :artist_name => @artist.name}, valid_session
         assigns(:album).should eq(@album)
       end
+
+      it "does not change the album's attributes" do
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:invalid_album), 
+          :artist_name => @artist.name}, valid_session
+        @album.reload
+        @genre.should_not eq("Invalid_genre")
+      end
+
 
       it "re-renders the 'edit' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Album.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @album.to_param, :album => {"album_title" => ""}, :artist_name => @artist.name}, valid_session
+        put :update, {:id => @album.to_param, 
+          :album => FactoryGirl.attributes_for(:invalid_album), 
+          :artist_name => @artist.name}, valid_session
         response.should render_template("edit")
       end
     end

@@ -25,6 +25,11 @@ FactoryGirl.define do
 		protected   'false'
 	end
 
+	factory :invalid_album, parent: :album do
+		album_title ''
+		genre       'Invalid_genre'
+	end
+
 	factory :song do
 		#album
 		song_title  'Test_song'
