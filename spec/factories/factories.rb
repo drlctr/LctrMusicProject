@@ -16,7 +16,7 @@ FactoryGirl.define do
 		nationality	'USA'
 	end
 
-	factory :invalid_artist do
+	factory :invalid_artist, parent: :artist do
 		name        ''
 		nationality 'Invalid'
 	end

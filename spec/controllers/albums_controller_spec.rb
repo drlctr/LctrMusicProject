@@ -50,7 +50,8 @@ describe AlbumsController do
 
   describe "GET show" do
     it "assigns the requested album as @album" do
-      get :show, {:id => @album.to_param, :album => FactoryGirl.attributes_for(:album)}, valid_session
+      get :show, {:id => @album.to_param, 
+        :album => FactoryGirl.attributes_for(:album)}, valid_session
       assigns(:album).should eq(@album)
     end
 

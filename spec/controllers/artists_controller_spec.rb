@@ -49,6 +49,12 @@ describe ArtistsController do
       get :show, {:id => @artist.to_param}, valid_session
       assigns(:artist).should eq(@artist)
     end
+
+    it "renders the #show view" do
+      get :show, {:id => @artist.to_param}, valid_session
+      response.should render_template :show
+    end
+
   end
 
   describe "GET new" do
@@ -69,18 +75,18 @@ describe ArtistsController do
     describe "with valid params" do
       it "creates a new Artist" do
         expect {
-          post :create, {:artist => {"name" => "Test_name"}}, valid_session
+          post :create, {:artist => FactoryGirl.attributes_for(:artist)}, valid_session
         }.to change(Artist, :count).by(1)
       end
 
       it "assigns a newly created artist as @artist" do
-        post :create, {:artist => {"name" => "Test_name"}}, valid_session
+        post :create, {:artist => FactoryGirl.attributes_for(:artist)}, valid_session
         assigns(:artist).should be_a(Artist)
         assigns(:artist).should be_persisted
       end
 
       it "redirects to the created artist" do
-        post :create, {:artist => {"name" => "Test_name"}}, valid_session
+        post :create, {:artist => FactoryGirl.attributes_for(:artist)}, valid_session
         response.should redirect_to(Artist.last)
       end
     end
@@ -89,14 +95,20 @@ describe ArtistsController do
       it "assigns a newly created but unsaved artist as @artist" do
         # Trigger the behavior that occurs when invalid params are submitted
         Artist.any_instance.stub(:save).and_return(false)
-        post :create, {:artist => { "name" => "invalid value" }}, valid_session
+        post :create, {:artist => FactoryGirl.attributes_for(:invalid_artist)}, valid_session
         assigns(:artist).should be_a_new(Artist)
+      end
+
+      it "does not save the new artist" do
+        expect{
+          post :create, {:artist => FactoryGirl.attributes_for(:invalid_artist)}
+        }.to_not change(Artist, :count)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Artist.any_instance.stub(:save).and_return(false)
-        post :create, {:artist => { "name" => "invalid value" }}, valid_session
+        post :create, {:artist => FactoryGirl.attributes_for(:invalid_artist)}, valid_session
         response.should render_template("new")
       end
     end
@@ -104,39 +116,65 @@ describe ArtistsController do
 
   describe "PUT update" do
     describe "with valid params" do
+
+      it "locates the requested artist" do
+        put :update, {id: @artist, artist: FactoryGirl.attributes_for(:artist)}, valid_session
+        assigns(:artist).should eq(@artist)
+      end
+
       it "updates the requested artist" do
         # Assuming there are no other artists in the database, this
         # specifies that the Artist created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Artist.any_instance.should_receive(:update).with({ "name" => "MyString" })
-        put :update, {:id => @artist.to_param, :artist => { "name" => "MyString" }}, valid_session
+        Artist.any_instance.should_receive(:update).with({ "name" => "Test_change", "nationality" => "USA" })
+        put :update, {:id => @artist.to_param, 
+          :artist => FactoryGirl.attributes_for(:artist, name: 'Test_change')}, valid_session
+      end
+
+      it "changes the artist's attributes" do
+        put :update, {:id => @artist.to_param, 
+          :artist => FactoryGirl.attributes_for(:artist, name: 'Test_change')}, valid_session
+        @artist.reload
+        @artist.name.should eq('Test_change')
       end
 
       it "assigns the requested artist as @artist" do
         #put :update, {:id => @artist.to_param, :artist => valid_attributes}, valid_session
-        put :update, {:id => @artist.to_param, :artist =>{"name" => "Test_name"}}, valid_session
+        put :update, {:id => @artist.to_param, :artist => FactoryGirl.attributes_for(:artist)}, valid_session
         assigns(:artist).should eq(@artist)
       end
 
       it "redirects to the artist" do
-        put :update, {:id => @artist.to_param, :artist => {"name" => "Test_name"}}, valid_session
+        put :update, {:id => @artist.to_param, :artist => FactoryGirl.attributes_for(:artist)}, valid_session
         response.should redirect_to(@artist)
       end
     end
 
     describe "with invalid params" do
-      it "assigns the artist as @artist" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Artist.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @artist.to_param, :artist => { "name" => "invalid value" }}, valid_session
+
+      it "locates the requested artist" do
+        put :update, {id: @artist, artist: FactoryGirl.attributes_for(:invalid_artist)}, valid_session
         assigns(:artist).should eq(@artist)
       end
 
+      it "assigns the artist as @artist" do
+        # Trigger the behavior that occurs when invalid params are submitted
+        Artist.any_instance.stub(:save).and_return(false)
+        put :update, {:id => @artist.to_param, :artist => FactoryGirl.attributes_for(:invalid_artist)}, valid_session
+        assigns(:artist).should eq(@artist)
+      end
+
+      it "does not change the artist's attributes" do
+        put :update, {:id => @artist.to_param, :artist => FactoryGirl.attributes_for(:invalid_artist)}, valid_session
+        @artist.reload
+        @nationality.should_not eq("Invalid")
+      end
+    
       it "re-renders the 'edit' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Artist.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @artist.to_param, :artist => { "name" => "invalid value" }}, valid_session
+        put :update, {:id => @artist.to_param, :artist => FactoryGirl.attributes_for(:invalid_artist)}, valid_session
         response.should render_template("edit")
       end
     end
