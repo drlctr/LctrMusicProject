@@ -47,36 +47,9 @@ class SongsController < ApplicationController
   # POST /songs.json
   def create
 
-    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
-      a = Artist.where(name: params[:artist_name])
-      artist_id = a[0].id
-    else
-      @artist=Artist.new(name: params[:artist_name])
-      if @artist.name.empty?
-        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
-        render action: :song_error and return
-      elsif !@artist.save
-        format.html { render action: 'new' }
-        format.json { render json: @artist.errors, status: :unprocessable_entity }
-      end
-      artist_id = @artist.id
-    end
+    artist_id = artist_exist_or_new(params[:artist_name])
 
-    if Album.all.collect{|a| a.album_title}.include? params[:album_name] 
-      a = Album.where(album_title: params[:album_name])
-      album_id = a[0].id
-    else
-      @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
-      if @album.album_title.empty?||@album.genre.empty?
-       @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
-        render action: :song_error and return
-      elsif !@album.save
-        format.html { render action: 'new' }
-        format.json { render json: @album.errors, status: :unprocessable_entity }
-      end
-      album_id = @album.id
-    end
-
+    album_id = album_exist_or_new(params[:album_name], params[:genre], artist_id)
 
     @song = Song.new(song_params)
     @song.album_id = album_id
@@ -96,43 +69,15 @@ class SongsController < ApplicationController
   # PATCH/PUT /songs/1.json
   def update
 
-    if Artist.all.collect{|a| a.name}.include? params[:artist_name] 
-      a = Artist.where(name: params[:artist_name])
-      artist_id = a[0].id
-    else
-      @artist=Artist.new(name: params[:artist_name])
-      if @artist.name.empty?
-        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
-        render action: :song_error and return
-      elsif !@artist.save
-        format.html { render action: 'new' }
-        format.json { render json: @artist.errors, status: :unprocessable_entity }
-      end
-      artist_id = @artist.id
-    end
+    artist_id = update_artist_exist_or_new(params[:artist_name])
 
-    if Album.all.collect{|a| a.album_title}.include? params[:album_name] 
-      a = Album.where(album_title: params[:album_name])
-      album_id = a[0].id
-    else
-      @album=Album.new(album_title: params[:album_name], genre: params[:genre], artist_id: artist_id)
-      if @album.album_title.empty?||@album.genre.empty?
-        @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
-        render action: :song_error and return
-      else
-       @album.save
-      end
-      album_id = @album.id
-    end
+    album_id = update_album_exist_or_new(params[:album_name], params[:genre], artist_id)
 
     respond_to do |format|
 
       @song.album_id = album_id
       a = @song.album
-      puts "Old artist_id = #{a.artist_id}"
       a.artist_id = artist_id
-      puts "New artist_id = #{a.artist_id}"
-      puts "Album is #{a.album_title}"
       a.save
 
       if @song.update(song_params)
@@ -168,6 +113,73 @@ class SongsController < ApplicationController
 
     def song_error
       puts "In song_error method, @err_msg = #{@err_msg}"
+    end
+
+    def artist_exist_or_new(artist_name)
+      if Artist.all.collect{|a| a.name}.include? artist_name 
+        a = Artist.where(name: artist_name)
+        artist_id = a[0].id
+      else
+        @artist=Artist.new(name: artist_name)
+        if @artist.name.empty?
+          @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+          render action: :song_error and return
+        elsif !@artist.save
+          format.html { render action: 'new' }
+          format.json { render json: @artist.errors, status: :unprocessable_entity }
+        end
+        artist_id = @artist.id
+      end
+    end
+
+    def album_exist_or_new(album_name, genre, artist_id)
+      if Album.all.collect{|a| a.album_title}.include? album_name 
+        a = Album.where(album_title: album_name)
+        album_id = a[0].id
+      else
+        @album=Album.new(album_title: album_name, genre: genre, artist_id: artist_id)
+        if @album.album_title.empty?||@album.genre.empty?
+          @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+          render action: :song_error and return
+        elsif !@album.save
+          format.html { render action: 'new' }
+          format.json { render json: @album.errors, status: :unprocessable_entity }
+        end
+        album_id = @album.id
+      end
+    end      
+
+    def update_artist_exist_or_new(artist_name)
+      if Artist.all.collect{|a| a.name}.include? artist_name 
+        a = Artist.where(name: artist_name)
+        artist_id = a[0].id
+      else
+        @artist=Artist.new(name: artist_name)
+        if @artist.name.empty?
+          @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+          render action: :song_error and return
+        elsif !@artist.save
+          format.html { render action: 'new' }
+          format.json { render json: @artist.errors, status: :unprocessable_entity }
+        end
+        artist_id = @artist.id
+      end
+    end
+
+    def update_album_exist_or_new(album_name, genre, artist_id)
+      if Album.all.collect{|a| a.album_title}.include? album_name 
+        a = Album.where(album_title: album_name)
+        album_id = a[0].id
+      else
+        @album=Album.new(album_title: album_name, genre: genre, artist_id: artist_id)
+        if @album.album_title.empty?||@album.genre.empty?
+          @err_msg = "The Album data requires an Artist, an Album Title and a Genre."
+          render action: :song_error and return
+        else
+         @album.save
+        end
+        album_id = @album.id
+      end
     end
 
 end

@@ -37,12 +37,19 @@ FactoryGirl.define do
 
 	factory :song do
 		#album
+		#id          '1'
 		song_title  'Test_song'
 		track       '1/10'
 		duration    '180'
 		path        '/test/path'
 		filename    'test_file.mp3'
 		composer    'test_composer'
+	end
+
+	factory :invalid_song, parent: :song do
+		#id         '2'
+		song_title ''
+		track      'Invalid'
 	end
 
 	factory :user do
