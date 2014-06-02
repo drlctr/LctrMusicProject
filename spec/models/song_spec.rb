@@ -32,17 +32,6 @@ describe Song do
   	end
   end
 
-  context "Testing track number validation" do
-  	
-  	it "must not have a negative track value" do
-  	  expect(test_neg_track.valid?).to be_false
-    end
-
-    it "must not have a non-integer track number" do
-    	expect(test_float_track.valid?).to be_false
-    end
-  end
-
   context "Testing duration validation" do
 
   	it "must not have a negative duration" do
