@@ -36,8 +36,6 @@ FactoryGirl.define do
 	end
 
 	factory :song do
-		#album
-		#id          '1'
 		song_title  'Test_song'
 		track       '1/10'
 		duration    '180'
@@ -47,7 +45,6 @@ FactoryGirl.define do
 	end
 
 	factory :invalid_song, parent: :song do
-		#id         '2'
 		song_title ''
 		track      'Invalid'
 	end
