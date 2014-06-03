@@ -10,20 +10,11 @@ describe Musician do
   context "When validating a musician record, it" do
 
   	it "should recognize a good record" do
-  	  expect(test_good.valid?).to be_true
+  	  expect(FactoryGirl.create(:musician).valid?).to be_true
   	end
 
   	it "must have a last name" do
-  		expect(test_no_Lname.valid?).to be_false
+  		expect(FactoryGirl.build(:musician, last_name: "").valid?).to be_false
   	end
-
-  	it "must have the birthdate as a date" do
-  		pending "Need to fix the birthdate validation"
-      #expect(test_bad_date.valid?).to be_false
-  	end
-
-  	# it "must be born in the past" do
-  	# 	expect(test_neg_date.valid?).to be_false
-  	#end
   end
 end

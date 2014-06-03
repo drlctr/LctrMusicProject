@@ -1,5 +1,11 @@
 require 'spec_helper'
 
 describe User do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+	context "User record"
+
+		it "should contain an email address" do
+			expect(FactoryGirl.create(:user).valid?).should be_true
+		end
+
 end

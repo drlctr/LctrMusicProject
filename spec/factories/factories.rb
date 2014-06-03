@@ -1,9 +1,5 @@
 FactoryGirl.define do 
 
-	factory :instrument do
-		name	'guitar'
-	end
-
 	factory :musician do
 		#instrument
 		first_name 	'John'
@@ -52,6 +48,20 @@ FactoryGirl.define do
 	factory :user do
 		email       'test@test.com'
 		password    '123456'
+	end
+
+	factory :ability do
+		instrument_id  1
+		musician_id    1
+	end
+
+	factory :instrument do
+		name           'Test_guitar'
+	end
+
+	factory :session do
+		musician_id    1
+		song_id        1
 	end
 
 end
