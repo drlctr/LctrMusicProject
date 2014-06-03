@@ -11,5 +11,17 @@ require 'spec_helper'
 #   end
 # end
 describe HomeHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+	describe HomeHelper do
+
+		describe "pick_guitar" do
+			it "assigns a white guitar if requested" do
+				pick_guitar('true').should eq('FlyingVW.jpg')
+			end
+
+			it "assigns a natural guitar if requested" do
+				pick_guitar('false').should eq ('FlyingVN.jpg')
+			end
+		end
+	end
 end
