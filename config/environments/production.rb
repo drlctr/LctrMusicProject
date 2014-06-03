@@ -15,7 +15,7 @@ MusicProject::Application.configure do
   config.action_controller.perform_caching = true
 
   # Devise wants a defined default url for action_mailer
-  config.action_mailer.default_url_options = { gentle-spire-8223.herokuapp.com/ }
+  config.action_mailer.default_url_options = { gentle-spire-8223.herokuapp.com} #/ }
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
